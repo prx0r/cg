@@ -1,0 +1,21 @@
+[
+  {
+    "kind": "toy.search_game",
+    "version": "1",
+    "description": "10 hidden boxes; find prize at minimum probe cost",
+    "content_hash": "builtin"
+  },
+  {
+    "kind": "trading.synthetic",
+    "version": "1",
+    "description": "walk-forward stance decisions over a deterministic synthetic market",
+    "content_hash": "builtin"
+  },
+  {
+    "kind": "demo.signal_game",
+    "version": 1,
+    "description": "template validation world for the scaffolder",
+    "scaffold_version": 4,
+    "content_hash": "db9b59727ed66f4a7236dd57"
+  }
+]

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cogymkernel — verifiable cognition claims</title>
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<header>
+  <h1>cogym<span class="k">kernel</span></h1>
+  <p class="tag">deterministic worlds · hard quality gates · claims you can re-run</p>
+  <nav>
+    <a href="#claims">Claims</a>
+    <a href="#worldpacks">Worldpacks</a>
+    <a href="#leaderboard">Leaderboard</a>
+    <a href="#publish">Publish</a>
+  </nav>
+</header>
+
+<main>
+<section id="what">
+  <p>A cogym world is a deterministic, content-addressed scenario. A
+  <strong>CapabilityClaim</b></strong> is a frozen result: replay the committed
+  world + candidate yourself and compare receipt hashes. If they differ, the
+  claim is refuted. No trust required — just execution.</p>
+</section>
+
+<section id="claims">
+  <h2>Capability Claims</h2>
+  <p class="muted">schema v1 · verdicts: SUPPORTED / PROVISIONAL (n&lt;30) / REFUTED</p>
+  <div id="claim-list" class="grid">loading…</div>
+</section>
+
+<section id="worldpacks">
+  <h2>Worldpacks</h2>
+  <div id="pack-list" class="grid">loading…</div>
+</section>
+
+<section id="leaderboard">
+  <h2>Leaderboard</h2>
+  <table id="lb"><thead><tr><th>rank</th><th>candidate</th><th>world</th><th>objective</th><th>mode</th><th>claim</th></tr></thead>
+  <tbody></tbody></table>
+</section>
+
+<section id="publish">
+  <h2>Publish your own</h2>
+  <ol>
+    <li><code>cogym claim create experiments/&lt;cycle&gt;/ —out my-claim.json</code></li>
+    <li>validate against <a href="https://github.com/cogymkernel/claims/blob/main/schema.v1.json">schema.v1.json</a></li>
+    <li>open a PR adding your JSON to <code>website/data/claims/</code></li>
+  </ol>
+  <p class="muted">verifiers re-run your committed scenario+candidate and diff receipt hashes.</p>
+</section>
+</main>
+
+<footer>deterministic kernels · quality gates dominate · hydra-derived memory · MIT</footer>
+<script src="js/site.js"></script>
+</body>
+</html>

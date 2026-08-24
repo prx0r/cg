@@ -1,0 +1,36 @@
+{
+  "author": "cogym-lab",
+  "candidate": {
+    "config": {
+      "topology": "chat3_vs_indep3"
+    },
+    "kind": "multi_agent_topology",
+    "version": "1"
+  },
+  "claim_id": "claim_4852eecb870f6815f9829e52",
+  "created_at": "2026-08-24T05:22:51Z",
+  "metrics": {
+    "v_comm_bps": -51.8
+  },
+  "mode": "PILOT",
+  "model": {
+    "id": "ox-alpha-free",
+    "seeded": true,
+    "temperature": 0.7
+  },
+  "n_decisions": 8,
+  "receipts": [],
+  "scenario_hash": "alpaca_bank:a621a0e19fa81566",
+  "schema": "cogym.capability_claim.v1",
+  "signature": null,
+  "suite_seeds": [],
+  "title": "Unstructured communication hurts: V_comm is negative",
+  "verification": {
+    "binary_k": 1,
+    "binary_outcome": "ABSTAIN",
+    "deterministic_pass": true,
+    "final": "PROVISIONAL"
+  },
+  "world": "alpaca.replay",
+  "worldpack": null
+}

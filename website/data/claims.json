@@ -1,0 +1,130 @@
+[
+  {
+    "candidate": {
+      "config": {
+        "style": "cot"
+      },
+      "kind": "llm_subject",
+      "version": "1"
+    },
+    "claim_id": "claim_860384a6c13a986a7db4e109",
+    "metrics": {
+      "direction_accuracy": 0.5,
+      "mean_latency_s": 23.0,
+      "utility_bps": -297.8
+    },
+    "mode": "PILOT",
+    "n_decisions": 4,
+    "title": "Reasoning style 'cot' on trend-market replay",
+    "verification": {
+      "final": "PROVISIONAL"
+    },
+    "world": "trading.synthetic"
+  },
+  {
+    "candidate": {
+      "config": {
+        "style": "cove"
+      },
+      "kind": "llm_subject",
+      "version": "1"
+    },
+    "claim_id": "claim_24d43933c9c1da372791f79e",
+    "metrics": {
+      "direction_accuracy": 0.5,
+      "mean_latency_s": 35.6,
+      "utility_bps": -297.8
+    },
+    "mode": "PILOT",
+    "n_decisions": 4,
+    "title": "Reasoning style 'cove' on trend-market replay",
+    "verification": {
+      "final": "PROVISIONAL"
+    },
+    "world": "trading.synthetic"
+  },
+  {
+    "candidate": {
+      "config": {
+        "style": "debate_3"
+      },
+      "kind": "llm_subject",
+      "version": "1"
+    },
+    "claim_id": "claim_1336816bb5b4bf6a080d7bc3",
+    "metrics": {
+      "direction_accuracy": 0.25,
+      "mean_latency_s": 40.8,
+      "utility_bps": -624.8
+    },
+    "mode": "PILOT",
+    "n_decisions": 4,
+    "title": "Reasoning style 'debate_3' on trend-market replay",
+    "verification": {
+      "final": "PROVISIONAL"
+    },
+    "world": "trading.synthetic"
+  },
+  {
+    "candidate": {
+      "config": {
+        "style": "direct"
+      },
+      "kind": "llm_subject",
+      "version": "1"
+    },
+    "claim_id": "claim_7396c88f2fe5065f0714b40b",
+    "metrics": {
+      "direction_accuracy": 0.5,
+      "mean_latency_s": 34.2,
+      "utility_bps": -297.8
+    },
+    "mode": "PILOT",
+    "n_decisions": 4,
+    "title": "Reasoning style 'direct' on trend-market replay",
+    "verification": {
+      "final": "PROVISIONAL"
+    },
+    "world": "trading.synthetic"
+  },
+  {
+    "candidate": {
+      "config": {
+        "topology": "chat3_vs_indep3"
+      },
+      "kind": "multi_agent_topology",
+      "version": "1"
+    },
+    "claim_id": "claim_6e770d0be0f38f5d0155b14e",
+    "metrics": {
+      "v_comm_bps": -51.8
+    },
+    "mode": "PILOT",
+    "n_decisions": 8,
+    "title": "Unstructured communication hurts: V_comm is negative",
+    "verification": {
+      "final": "PROVISIONAL"
+    },
+    "world": "alpaca.replay"
+  },
+  {
+    "candidate": {
+      "config": {
+        "topology": "debate3"
+      },
+      "kind": "multi_agent_topology",
+      "version": "1"
+    },
+    "claim_id": "claim_3d8a63445c51c9728f874f6b",
+    "metrics": {
+      "utility_bps": 92.8
+    },
+    "mode": "PILOT",
+    "n_decisions": 8,
+    "title": "Structured debate beats unstructured chat",
+    "verification": {
+      "final": "PROVISIONAL"
+    },
+    "world": "alpaca.replay"
+  }
+]
