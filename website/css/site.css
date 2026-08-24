@@ -22,3 +22,5 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.45rem .
 th{color:var(--mut);font-weight:500}
 footer{max-width:1000px;margin:0 auto;padding:2rem;color:var(--mut);border-top:1px solid var(--line)}
 .muted{color:var(--mut)}
+.card a{color:var(--acc);word-break:break-all}
+ol{padding-left:1.1rem;margin:.4rem 0}

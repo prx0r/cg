@@ -1,0 +1,41 @@
+name: validate-claims
+
+on:
+  push: {paths: ["website/data/claims/**", "claims/**"]}
+  pull_request: {paths: ["website/data/claims/**", "claims/**"]}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install jsonschema
+      - name: Schema-validate every published claim
+        run: |
+          python3 - <<'PY'
+          import json, glob, jsonschema, sys
+          schema = json.load(open("claims/schema.v1.json"))
+          files = sorted(glob.glob("website/data/claims/*.json"))
+          assert files, "no claims found"
+          for f in files:
+              jsonschema.validate(json.load(open(f)), schema)
+          idx = json.load(open("website/data/claims.json"))
+          for c in idx:
+              jsonschema.validate(c, schema)
+          print(f"validated {len(files)} claims")
+          PY
+      - name: Determinism re-run (claim ids are content hashes)
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, glob
+          for f in sorted(glob.glob("website/data/claims/*.json")):
+              c = json.load(open(f))
+              payload = {k: v for k, v in c.items()
+                         if k not in ("claim_id", "created_at", "signature")}
+              h = "claim_" + hashlib.sha256(
+                  json.dumps(payload, sort_keys=True).encode()).hexdigest()[:24]
+              assert h == c["claim_id"], f"{f}: content hash drift"
+          print("all claim_ids reproduce from content")
+          PY

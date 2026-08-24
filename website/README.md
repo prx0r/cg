@@ -18,3 +18,19 @@ Static, zero-build. Deploy: `npx wrangler pages deploy website --project-name=co
 4. PR the JSON into `website/data/claims/` — CI re-validates and re-renders.
 
 No server, no database: claims are files; the site is their window.
+
+## Reproducibility contract
+
+Every claim embeds: git repo + exact commit, world path, dependency lock hash,
+python version, verbatim API transcript hashes, and the re-execute command.
+CI (`.github/workflows/validate-claims.yml`) enforces:
+1. jsonschema validation of every published claim
+2. claim_id content-hash determinism (tamper detection)
+
+Verifiers clone the repo at the pinned commit, checkout the worldpack hash,
+run the command, and diff receipt hashes. Mismatch = refuted claim.
+
+## Worldpacks
+
+`tools/export_worldpacks.py` bundles registered worlds into `worldpacks/*.tar.gz`
+with sha256 + replay instructions, indexed in `data/worldpacks.json`.

@@ -3,50 +3,195 @@
   "title": "CapabilityClaim v1",
   "description": "Content-addressed, re-runnable claim about policy performance in a cogym world. Third parties verify by replaying the committed scenario+candidate and comparing receipt hashes.",
   "type": "object",
-  "required": ["schema", "claim_id", "world", "scenario_hash", "candidate", "metrics", "verification", "created_at"],
+  "required": [
+    "schema",
+    "claim_id",
+    "world",
+    "scenario_hash",
+    "candidate",
+    "metrics",
+    "verification",
+    "created_at",
+    "reproducibility"
+  ],
   "properties": {
-    "schema": {"const": "cogym.capability_claim.v1"},
-    "claim_id": {"type": "string", "pattern": "^claim_[a-f0-9]{24}$"},
-    "title": {"type": "string", "maxLength": 120},
-    "world": {"type": "string", "description": "registered world kind, e.g. toy.search_game"},
-    "worldpack": {"type": ["string", "null"], "description": "content id of the worldpack distribution"},
-    "scenario_hash": {"type": "string", "minLength": 16},
-    "suite_seeds": {"type": "array", "items": {"type": "integer"}},
+    "schema": {
+      "const": "cogym.capability_claim.v1"
+    },
+    "claim_id": {
+      "type": "string",
+      "pattern": "^claim_[a-f0-9]{24}$"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "world": {
+      "type": "string",
+      "description": "registered world kind, e.g. toy.search_game"
+    },
+    "worldpack": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "content id of the worldpack distribution"
+    },
+    "scenario_hash": {
+      "type": "string",
+      "minLength": 16
+    },
+    "suite_seeds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
     "candidate": {
       "type": "object",
-      "required": ["kind", "version", "config"],
+      "required": [
+        "kind",
+        "version",
+        "config"
+      ],
       "properties": {
-        "kind": {"type": "string"},
-        "version": {"type": "string"},
-        "config": {"type": "object"}
+        "kind": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "config": {
+          "type": "object"
+        }
       }
     },
     "metrics": {
       "type": "object",
       "description": "aggregated MetricVector values; include unit-bearing names verbatim",
-      "additionalProperties": {"type": "number"}
+      "additionalProperties": {
+        "type": "number"
+      }
     },
-    "mode": {"enum": ["PILOT", "CONFIRMATORY"]},
-    "n_decisions": {"type": "integer", "minimum": 1},
+    "mode": {
+      "enum": [
+        "PILOT",
+        "CONFIRMATORY"
+      ]
+    },
+    "n_decisions": {
+      "type": "integer",
+      "minimum": 1
+    },
     "verification": {
       "type": "object",
-      "required": ["final"],
+      "required": [
+        "final"
+      ],
       "properties": {
-        "final": {"enum": ["SUPPORTED", "REFUTED", "PROVISIONAL", "DISPUTED", "BLOCKED"]},
-        "deterministic_pass": {"type": "boolean"},
-        "binary_outcome": {"enum": ["SUPPORTED", "REFUTED", "ABSTAIN", null]},
-        "binary_k": {"type": "integer", "minimum": 1}
+        "final": {
+          "enum": [
+            "SUPPORTED",
+            "REFUTED",
+            "PROVISIONAL",
+            "DISPUTED",
+            "BLOCKED"
+          ]
+        },
+        "deterministic_pass": {
+          "type": "boolean"
+        },
+        "binary_outcome": {
+          "enum": [
+            "SUPPORTED",
+            "REFUTED",
+            "ABSTAIN",
+            null
+          ]
+        },
+        "binary_k": {
+          "type": "integer",
+          "minimum": 1
+        }
       }
     },
     "receipts": {
       "type": "array",
-      "items": {"type": "string"},
+      "items": {
+        "type": "string"
+      },
       "description": "sha256 of canonical receipt files; verifier replays these"
     },
-    "model": {"type": "object", "properties": {"id": {"type": "string"}, "temperature": {"type": "number"}, "seeded": {"type": "boolean"}}},
-    "author": {"type": "string"},
-    "created_at": {"type": "string", "format": "date-time"},
-    "signature": {"type": ["string", "null"], "description": "optional detached signature over claim_id + receipts"}
+    "model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "temperature": {
+          "type": "number"
+        },
+        "seeded": {
+          "type": "boolean"
+        }
+      }
+    },
+    "author": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "signature": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "optional detached signature over claim_id + receipts"
+    },
+    "reproducibility": {
+      "type": "object",
+      "description": "Everything needed to clone and re-execute the exact experiment",
+      "required": [
+        "git_repo",
+        "git_commit",
+        "world_path"
+      ],
+      "properties": {
+        "git_repo": {
+          "type": "string",
+          "description": "clone URL of the lab repo"
+        },
+        "git_commit": {
+          "type": "string",
+          "minLength": 40,
+          "maxLength": 40
+        },
+        "world_path": {
+          "type": "string",
+          "description": "path to world dir inside repo"
+        },
+        "deps_lock": {
+          "type": "string",
+          "description": "sha256 of requirements/uv.lock"
+        },
+        "python_version": {
+          "type": "string"
+        },
+        "api_transcripts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "paths/sha256 of verbatim LLM request+reply transcripts"
+        },
+        "run_command": {
+          "type": "string",
+          "description": "exact command to re-execute"
+        }
+      }
+    }
   },
   "additionalProperties": false
 }

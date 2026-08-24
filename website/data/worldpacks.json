@@ -3,19 +3,27 @@
     "kind": "toy.search_game",
     "version": "1",
     "description": "10 hidden boxes; find prize at minimum probe cost",
-    "content_hash": "builtin"
-  },
-  {
-    "kind": "trading.synthetic",
-    "version": "1",
-    "description": "walk-forward stance decisions over a deterministic synthetic market",
-    "content_hash": "builtin"
+    "content_hash": "builtin:core",
+    "git_repo": "https://github.com/prx0r/cogym.git",
+    "git_commit": "765f9c0f9377b21e9e6c0e3036da488786451a83",
+    "replay": [
+      "cd canonical",
+      "python3 -m pytest tests/test_generic_core.py -q"
+    ]
   },
   {
     "kind": "demo.signal_game",
-    "version": 1,
+    "version": "1",
     "description": "template validation world for the scaffolder",
-    "scaffold_version": 4,
-    "content_hash": "db9b59727ed66f4a7236dd57"
+    "content_hash": "sha256:cd0142120aa29084ba84afb9f9ac9985295b7a3cc9a1f61a49816013a38a1f83",
+    "artifact": "demo.signal_game-v1.tar.gz",
+    "git_repo": "https://github.com/prx0r/cogym.git",
+    "git_commit": "765f9c0f9377b21e9e6c0e3036da488786451a83",
+    "replay": [
+      "git clone  cogym-lab || true",
+      "cd cogym-lab && git checkout 765f9c0f9377b21e9e6c0e3036da488786451a83",
+      "tar xzf worldpacks/demo.signal_game-v1.tar.gz",
+      "cd canonical && python3 -m cogym.worlds.demo.runner --generations 2"
+    ]
   }
 ]
