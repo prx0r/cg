@@ -2,7 +2,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
-from .client import Edge, HydraClient, HydraError, NodeRef, apply_ops
+from .client import Edge, HydraClient, HydraError, NodeRef
 
 
 @dataclass
@@ -27,7 +27,7 @@ async def project_performance(client: HydraClient, policy_key: str,
         props["quality_pass"] = bool(quality_pass)
     await client.ensure_node(pol)
     await client.ensure_node(fam)
-    await client.put_edge(Edge("RAN_ON", pol, fam, props))
+    await client.ensure_node(Edge("RAN_ON", pol, fam, props).to_node())
 
 
 async def top_policies(client: HydraClient, family_key: str,

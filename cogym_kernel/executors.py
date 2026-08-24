@@ -8,6 +8,8 @@ zero tokens. Cache lives beside receipts; opt out per call.
 """
 from __future__ import annotations
 
+import asyncio
+import hashlib
 import json
 import os
 import time
@@ -84,30 +86,58 @@ class RecordingExecutor:
 class ModelExecutor:
     """Async model calls with a content-addressed response cache (ADR-5).
 
-    `complete_fn(messages, temperature, seed)` must be injected (provider
-    adapter). Cache key = hash(model, messages, temperature, seed). Cache hits
-    are marked cache_hit=True and cost 0 — reruns of identical experiments are
-    free and byte-reproducible.
+    complete_fn(messages, temperature, seed) -> str is injected by the caller
+    (provider adapter). Cache key = hash(model, prompt, temperature, seed).
+    Cache hits return cache_hit=True at zero cost: identical experiment reruns
+    are byte-reproducible and free.
     """
 
     executor_id = "model-cached-v1"
 
-    def __init__(self, complete_fn: Callable[..., str], model_id: str,
+    def __init__(self, complete_fn, model_id: str,
                  cache_dir: str | None = None):
         self.complete_fn = complete_fn
         self.model_id = model_id
         self.cache_dir = cache_dir
 
-    def _cache_path(self, messages: list[dict], temperature: float,
-                    seed: int) -> tuple[str, str]:
-        payload = {"model": self.model_id, "messages": messages,
-                   "temperature": temperature, "seed": seed}
-        h = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
-        return h, (os.path.join(self.cache_dir, f"{h}.json")
-                   if self.cache_dir else "")
+    def _cache_path(self, key: str) -> str:
+        d = self.cache_dir or os.path.join(os.getcwd(), ".cogym-cache")
+        os.makedirs(d, exist_ok=True)
+        return os.path.join(d, f"{key}.json")
 
+    @staticmethod
+    def cache_key(model_id: str, prompt: str, temperature: float,
+                  seed: int) -> str:
+        payload = json.dumps({"model": model_id, "prompt": prompt,
+                              "temperature": temperature, "seed": seed},
+                             sort_keys=True)
+        return hashlib.sha256(payload.encode()).hexdigest()
+
+    async def complete(self, prompt: str, *, temperature: float = 0.3,
+                       seed: int = 7) -> dict:
+        """Returns {"text", "cache_hit", "latency_s", "key"}."""
+        key = self.cache_key(self.model_id, prompt, temperature, seed)
+        path = self._cache_path(key)
+        if os.path.exists(path):
+            rec = json.load(open(path))
+            rec.update(cache_hit=True)
+            return rec
+        t0 = time.time()
+        text = await self.complete_fn(prompt) if asyncio.iscoroutinefunction(
+            self.complete_fn) else await asyncio.to_thread(self.complete_fn,
+                                                           prompt)
+        rec = {"text": text, "cache_hit": False, "model": self.model_id,
+               "temperature": temperature, "seed": seed,
+               "latency_s": round(time.time() - t0, 2), "key": key}
+        with open(path, "w") as fh:
+            json.dump(rec, fh, sort_keys=True)
+        return rec
+
+    # Executor-protocol shim so AsyncRunner can route MODEL actions to it.
     def execute(self, action: ActionSpec) -> ActionResult:
-        raise NotImplementedError("use async_execute via AsyncRunner")
+        raise NotImplementedError(
+            "model actions run through await ModelExecutor.complete(); "
+            "AsyncRunner routes them via an adapter policy.")
 
 
 def now_ns() -> int:

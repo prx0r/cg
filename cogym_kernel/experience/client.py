@@ -90,8 +90,11 @@ class HydraClient:
         data = json.dumps(payload).encode()
         if self._httpx:
             import httpx
-            async with httpx.AsyncClient(timeout=self.timeout_s) as cli:
-                r = await cli.post(url, content=data, headers=headers)
+            try:
+                async with httpx.AsyncClient(timeout=self.timeout_s) as cli:
+                    r = await cli.post(url, content=data, headers=headers)
+            except Exception as e:  # noqa: BLE001 - transport failures -> HydraError
+                raise HydraError(str(e)[:200]) from None
             if r.status_code >= 400:
                 raise HydraError(r.json().get("error", {}).get("message",
                                                               r.text)[:200])

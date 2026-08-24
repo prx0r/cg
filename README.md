@@ -7,8 +7,9 @@ hard constraints. An experience graph remembers everything.
 ```
 pip install -e ".[dev]"        # or: uv pip install -e .
 python3 -m pytest tests/ -q    # determinism is CI-enforced
-python3 -m cogym_kernel.cli status
-python3 -m cogym_kernel.cli run --seed 42
+cg status                      # razor alias: cg == cogym_kernel
+cg run --seed 42
+# also: from cg.k.ids import content_id  (2 chars vs 12)
 ```
 
 That last command prints a **RunReceipt** with a `run_id` — a blake3 content
@@ -33,6 +34,7 @@ primitive the whole stack builds on.
 
 - [`docs/GUIDE.md`](docs/GUIDE.md) — **start here**: full operational guide
 - [`docs/GIT-LEDGER.md`](docs/GIT-LEDGER.md) — run hashing + git-as-ledger design
+- [`docs/HYDRA-EXPLAINER.md`](docs/HYDRA-EXPLAINER.md) — official API reference (endpoints, auth, errors)
 - [`docs/HYDRA.md`](docs/HYDRA.md) — experience graph setup, quirks, rebuild
 - [`docs/HERMES.md`](docs/HERMES.md) — optional kanban adapter usage
 - `AGENTS.md` — binding rules for coding agents
