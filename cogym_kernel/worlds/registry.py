@@ -48,3 +48,15 @@ def create(kind: str, **kwargs):
 def _toy(**kw):
     from .toy import SignalWorld
     return SignalWorld(**kw)
+
+
+@register("school", "allocation architecture evolution — pools of strategies, dynamic capital routing")
+def _school(**kw):
+    from .school.world import SchoolWorld
+    return SchoolWorld(**kw)
+
+
+@register("bitsec.scabench", "BitSec security benchmark — ScaBench projects, hidden ground truth, Jaccard scoring")
+def _bitsec(**kw):
+    from .bitsec import BitSecWorld
+    return BitSecWorld(**kw)
